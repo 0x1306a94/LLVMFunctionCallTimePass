@@ -31,3 +31,10 @@ if [[ $CODE != 0 ]]; then
     rm $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt
     mv $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt.temp $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt
 fi
+
+cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt | grep 'FunctionCallTime'
+CODE=$?
+echo $CODE
+if [[ $CODE != 0 ]]; then
+    echo 'add_subdirectory(FunctionCallTime)' >> $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt
+fi
