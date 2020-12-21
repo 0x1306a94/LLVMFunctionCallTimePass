@@ -111,4 +111,4 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos,c,c++
 build_dir/
 deps/
-.ll
+*.ll
