@@ -140,7 +140,20 @@ struct FunctionCallTimePass : public FunctionPass {
 		    FunctionType::get(Type::getVoidTy(context),
 		                      {Type::getInt8PtrTy(context)}, false));
 
-		errs() << "function-call-time: " << BB.getParent()->getName() << " begin\n";
+        auto funcName = BB.getParent()->getName();
+        // Objective-C 方法前面有 \x01
+        if (funcName.front() == '\x01') {
+            funcName = funcName.drop_front();
+        }
+
+        if (funcName.startswith("__Z") || funcName.startswith("_Z")) {
+            // C++ 函数
+            std::string str       = funcName.str();
+            std::string demangled = demangle(str);
+            funcName              = StringRef(demangled);
+        }
+        
+		errs() << "function-call-time: " << funcName << " begin\n";
 		// 2. 构造函数
 		CallInst *inst = nullptr;
 		IRBuilder<> builder(&BB);
@@ -189,8 +202,21 @@ struct FunctionCallTimePass : public FunctionPass {
 
 				// 插入end_func(struction)
 				endCI->insertBefore(IST);
+                
+                auto funcName = BB.getParent()->getName();
+                // Objective-C 方法前面有 \x01
+                if (funcName.front() == '\x01') {
+                    funcName = funcName.drop_front();
+                }
 
-				errs() << "function-call-time: " << BB.getParent()->getName()
+                if (funcName.startswith("__Z") || funcName.startswith("_Z")) {
+                    // C++ 函数
+                    std::string str       = funcName.str();
+                    std::string demangled = demangle(str);
+                    funcName              = StringRef(demangled);
+                }
+
+				errs() << "function-call-time: " << funcName
 				       << " end\n";
 			}
 		}
