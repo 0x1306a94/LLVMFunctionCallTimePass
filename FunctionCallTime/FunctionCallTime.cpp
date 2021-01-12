@@ -70,6 +70,10 @@ struct FunctionCallTimePass : public FunctionPass {
 			return false;
 		}
 
+		if (funcName.str().length() == 0) {
+			return false;
+		}
+
 		// 只统计 Objective-C 方法调用
 		if (funcName.startswith("+[") || funcName.startswith("-[")) {
 			// 2. 插入开始
@@ -157,7 +161,7 @@ struct FunctionCallTimePass : public FunctionPass {
 		CallInst *inst = nullptr;
 		IRBuilder<> builder(&BB);
 		IRBuilder<> callBuilder(context);
-		Value *name = builder.CreateGlobalStringPtr(BB.getParent()->getName());
+		Value *name = builder.CreateGlobalStringPtr(funcName);
 		inst        = callBuilder.CreateCall(beginFun, {name});
 
 		if (!inst) {
@@ -193,15 +197,6 @@ struct FunctionCallTimePass : public FunctionPass {
 				FunctionCallee endFunc = BB.getModule()->getOrInsertFunction(
 				    FunctionCallTimePass::EndFuncName, endFuncType);
 
-				// 构造end_func
-				IRBuilder<> builder(&BB);
-				IRBuilder<> callBuilder(context);
-				Value *name     = builder.CreateGlobalStringPtr(BB.getParent()->getName());
-				CallInst *endCI = callBuilder.CreateCall(endFunc, {name});
-
-				// 插入end_func(struction)
-				endCI->insertBefore(IST);
-
 				auto funcName = BB.getParent()->getName();
 				// Objective-C 方法前面有 \x01
 				if (funcName.front() == '\x01') {
@@ -214,6 +209,15 @@ struct FunctionCallTimePass : public FunctionPass {
 					std::string demangled = demangle(str);
 					funcName              = StringRef(demangled);
 				}
+
+				// 构造end_func
+				IRBuilder<> builder(&BB);
+				IRBuilder<> callBuilder(context);
+				Value *name     = builder.CreateGlobalStringPtr(funcName);
+				CallInst *endCI = callBuilder.CreateCall(endFunc, {name});
+
+				// 插入end_func(struction)
+				endCI->insertBefore(IST);
 
 				errs() << "function-call-time: " << funcName
 				       << " end\n";
