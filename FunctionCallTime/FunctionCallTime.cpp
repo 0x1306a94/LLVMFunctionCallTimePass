@@ -55,7 +55,7 @@ struct FunctionCallTimePass : public FunctionPass {
 			funcName = funcName.drop_front();
 		}
 
-		if (funcName.startswith("__Z") || funcName.startswith("_Z")) {
+		if (funcName.startswith("_Z") || funcName.startswith("__Z") || funcName.startswith("___Z")) {
 			// C++ 函数
 			std::string str       = funcName.str();
 			std::string demangled = demangle(str);
@@ -78,7 +78,6 @@ struct FunctionCallTimePass : public FunctionPass {
 			}
 			// 3. 插入结束
 			insertEndInst(F);
-			return false;
 		}
 		return false;
 	}
@@ -146,7 +145,7 @@ struct FunctionCallTimePass : public FunctionPass {
 			funcName = funcName.drop_front();
 		}
 
-		if (funcName.startswith("__Z") || funcName.startswith("_Z")) {
+		if (funcName.startswith("_Z") || funcName.startswith("__Z") || funcName.startswith("___Z")) {
 			// C++ 函数
 			std::string str       = funcName.str();
 			std::string demangled = demangle(str);
@@ -209,7 +208,7 @@ struct FunctionCallTimePass : public FunctionPass {
 					funcName = funcName.drop_front();
 				}
 
-				if (funcName.startswith("__Z") || funcName.startswith("_Z")) {
+				if (funcName.startswith("_Z") || funcName.startswith("__Z") || funcName.startswith("___Z")) {
 					// C++ 函数
 					std::string str       = funcName.str();
 					std::string demangled = demangle(str);
