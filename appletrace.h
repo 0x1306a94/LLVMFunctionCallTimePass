@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-FOUNDATION_EXPORT void APTBeginSection(const char *name);
-FOUNDATION_EXPORT void APTEndSection(const char *name);
-FOUNDATION_EXPORT void APTSyncWait(void);
+FOUNDATION_EXPORT void _kk_APTBeginSection(const char *name);
+FOUNDATION_EXPORT void _kk_APTEndSection(const char *name);
+FOUNDATION_EXPORT void _kk_APTSyncWait(void);
 
 // Objective C class method
-#define APTBegin APTBeginSection([NSString stringWithFormat:@"[%@]%@", self, NSStringFromSelector(_cmd)].UTF8String)
-#define APTEnd APTEndSection([NSString stringWithFormat:@"[%@]%@", self, NSStringFromSelector(_cmd)].UTF8String)
+#define APTBegin _kk_APTBeginSection([NSString stringWithFormat:@"[%@]%@", self, NSStringFromSelector(_cmd)].UTF8String)
+#define APTEnd _kk_APTEndSection([NSString stringWithFormat:@"[%@]%@", self, NSStringFromSelector(_cmd)].UTF8String)
 

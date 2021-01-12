@@ -243,15 +243,15 @@ class TraceManager {
 };
 }  // namespace appletrace
 
-void APTBeginSection(const char *name) IGNORE_FUNC_TRACE {
+void _kk_APTBeginSection(const char *name) IGNORE_FUNC_TRACE {
 	appletrace::TraceManager::Instance().BeginSection(name);
 }
 
-void APTEndSection(const char *name) IGNORE_FUNC_TRACE {
+void _kk_APTEndSection(const char *name) IGNORE_FUNC_TRACE {
 	appletrace::TraceManager::Instance().EndSection(name);
 }
 
-void APTSyncWait() IGNORE_FUNC_TRACE {
+void _kk_APTSyncWait() IGNORE_FUNC_TRACE {
 	appletrace::TraceManager::Instance().SyncWait();
 }
 
@@ -259,7 +259,7 @@ void APTSyncWait() IGNORE_FUNC_TRACE {
 @end
 @implementation APTInterface
 + (void)syncWait IGNORE_FUNC_TRACE {
-	APTSyncWait();
+	_kk_APTSyncWait();
 }
 
 + (void)test {

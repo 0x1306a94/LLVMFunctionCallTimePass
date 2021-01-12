@@ -19,22 +19,22 @@ unzip ${LLVM_DIR}.zip -d $LLVM_DIR
 wget https://github.com/llvm/llvm-project/releases/download/llvmorg-${VERSION}/clang+llvm-${VERSION}-x86_64-apple-darwin.tar.xz -O ${CLANG_DIR}.tar.xz
 tar xf ${CLANG_DIR}.tar.xz -C $CLANG_DIR --strip-components 1
 
-ln -sf $CUR_DIR/FunctionCallTime $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/FunctionCallTime
+git clone https://github.com/0x1306a94/LLVMFunctionCallTimePass $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMFunctionCallTimePass
 
 set +e
 
-cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt | grep 'FunctionCallTime'
+cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt | grep 'LLVMFunctionCallTimePass'
 CODE=$?
 echo $CODE
 if [[ $CODE != 0 ]]; then
-    sed 's/subdirectories.*/& FunctionCallTime/g' $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt > $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt.temp
+    sed 's/subdirectories.*/& LLVMFunctionCallTimePass/g' $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt > $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt.temp
     rm $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt
     mv $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt.temp $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt
 fi
 
-cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt | grep 'FunctionCallTime'
+cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt | grep 'LLVMFunctionCallTimePass'
 CODE=$?
 echo $CODE
 if [[ $CODE != 0 ]]; then
-    echo 'add_subdirectory(FunctionCallTime)' >> $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt
+    echo 'add_subdirectory(LLVMFunctionCallTimePass)' >> $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/CMakeLists.txt
 fi
