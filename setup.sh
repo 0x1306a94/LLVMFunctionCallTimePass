@@ -21,6 +21,8 @@ tar xf ${CLANG_DIR}.tar.xz -C $CLANG_DIR --strip-components 1
 
 git clone https://github.com/0x1306a94/LLVMFunctionCallTimePass $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMFunctionCallTimePass
 
+ln -sf $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMFunctionCallTimePass $CUR_DIR/LLVMFunctionCallTimePass
+
 set +e
 
 cat $LLVM_DIR/llvm-project-llvmorg-${VERSION}/llvm/lib/Transforms/LLVMBuild.txt | grep 'LLVMFunctionCallTimePass'
