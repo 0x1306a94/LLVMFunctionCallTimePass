@@ -75,7 +75,7 @@ struct FunctionCallTimePass : public FunctionPass {
 		}
 
 		// 只统计 Objective-C 方法调用
-		if (funcName.startswith("+[") || funcName.startswith("-[")) {
+		if (funcName.startswith("+[") || funcName.startswith("-[") || funcName.contains("_block")) {
 			// 2. 插入开始
 			if (!insertBeginInst(F)) {
 				return false;
